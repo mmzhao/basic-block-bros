@@ -7,9 +7,11 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -24,7 +26,6 @@ public class WorldPresenter implements Screen{
 	private final World world;
 	
 	private OrthographicCamera camera;
-	private SpriteBatch batch;
 	// libgdx Array is basically an arraylist
 	private Texture img;
 	
@@ -38,7 +39,6 @@ public class WorldPresenter implements Screen{
 		float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 		camera.setToOrtho(false, w, h);
-		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
 	}
 
@@ -47,6 +47,7 @@ public class WorldPresenter implements Screen{
 		// update world
 		world.update(delta);
 		
+		int fps = Gdx.graphics.getFramesPerSecond();
 		
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -58,17 +59,27 @@ public class WorldPresenter implements Screen{
 		// draw stuff
 		game.batch.begin();
 		game.batch.draw(img, world.player.getX(), world.player.getY(), world.player.getWidth(), world.player.getHeight());
-		game.batch.draw(img, world.wall.getX(), world.wall.getY(), world.wall.getWidth(), world.wall.getHeight());
+		game.batch.draw(img, world.platform.getX(), world.platform.getY(), world.platform.getWidth(), world.platform.getHeight());
+		for(Mob mob: world.mobs)
+			game.batch.draw(img, mob.getX(), mob.getY(), mob.getWidth(), mob.getHeight());
+		
+        // fps display
+		game.font.setColor(Color.RED);
+        game.font.draw(game.batch, "fps: " + fps, 100, 1500);
+        
         game.batch.end();
 		// stop drawing stuff
 		
 		// stuff for changes, like movement etc
 		
 		// user input
-//		if(Gdx.input.isKeyPressed(Keys.LEFT)) bucket.x -= 200 * Gdx.graphics.getDeltaTime();
-//		if(Gdx.input.isKeyPressed(Keys.RIGHT)) bucket.x += 200 * Gdx.graphics.getDeltaTime();
+		if(Gdx.input.isKeyPressed(Keys.LEFT)) world.player.dx = -200;
+		else if(Gdx.input.isKeyPressed(Keys.RIGHT)) world.player.dx = 200;
+		else world.player.dx = 0;
 		
-		// automatic updates
+		if(Gdx.input.isKeyPressed(Keys.UP)) world.player.dy = 500;
+//		else if(Gdx.input.isKeyPressed(Keys.DOWN)) world.player.dy = -50;
+//		else world.player.dx = 0;
 		
 	    
 	}
@@ -107,6 +118,5 @@ public class WorldPresenter implements Screen{
 	@Override
     public void dispose() {
         img.dispose();
-        batch.dispose();
     }
 }

@@ -18,7 +18,7 @@ public class DynamicEntity extends Entity{
 		dx = 0;
 		dy = 0;
 		
-		ay = -500;
+		ay = -2500;
 	}
 	
 	public void update(float delta) {

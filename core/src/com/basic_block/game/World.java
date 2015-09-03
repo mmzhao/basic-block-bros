@@ -1,5 +1,7 @@
 package com.basic_block.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -14,7 +16,9 @@ public class World {
 
 	Player player;
 	
-	Entity wall;
+	Platform platform;
+	
+	ArrayList<Mob> mobs;
 	
 	public World() {
 		float w = Gdx.graphics.getWidth();
@@ -25,14 +29,37 @@ public class World {
 		maxY = h;
 		roomBounds = new Rectangle(minX, minY, maxX - minX, maxY - minY);
 		player = new Player();
-		wall = new Entity();
+		platform = new Platform();
+		mobs = new ArrayList<Mob>();
+		for(int i = 0; i < 1; i++) {
+			Mob m = new Mob();
+//			m.setX((i % 200) * 10);
+//			m.setY((i / 200) * 10);
+			
+			mobs.add(m);
+		}
+		
 	}
 	
 	public void update(float delta) {
+		// do updates
 		player.update(delta);
-		if(Collision.intersect(player, wall)) {
-			Collision.fixIntersection(player, wall, delta);
+		for(Mob mob: mobs)
+			mob.update(delta);
+		
+		// check collisions
+		if(Collision.intersect(player, platform)) {
+			Collision.fixIntersection(player, platform, delta);
 		}
+		for(Mob mob: mobs){
+			if(Collision.intersect(mob, platform)) {
+				Collision.fixIntersection(mob, platform, delta);
+			}
+		}
+//		if(Collision.intersect(player, mob)) {
+//			System.out.println("hit");
+//		}
+		
 	}
 	
 }

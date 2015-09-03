@@ -82,6 +82,7 @@ public class Collision {
 			// going left, need to bump right, move left edge of d to right edge of e
 			d.setX(e.getX() + e.getWidth());
 		}
+		d.setDX(0);
 	}
 	
 	private static void adjustY(DynamicEntity d, Entity e) {
@@ -93,6 +94,18 @@ public class Collision {
 			// going down, need to bump up, move bottom edge of d to top edge of e
 			d.setY(e.getY() + e.getHeight());
 		}
+		d.setDY(0);
+	}
+	
+	public static boolean intersect(DynamicEntity d1, DynamicEntity d2) {
+		// assumes dynamic entities are circular, so width equals height
+		
+		// check pythag
+		if(Math.pow(d1.getX() - d2.getX(), 2) + Math.pow(d1.getY() + d2.getY(), 2) < Math.pow(d1.getWidth() / 2 + d2.getWidth() / 2, 2)) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	
