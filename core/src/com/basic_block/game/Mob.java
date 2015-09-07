@@ -23,6 +23,25 @@ public class Mob extends DynamicEntity {
 		ay = Settings.gravity;
 	}
 	
+	public Mob(float tileOffset) {
+		x = Settings.screenWidth/2 - 400 + tileOffset;
+		y = Settings.screenHeight/2;
+		
+		width = Settings.mobWidth;
+		height = Settings.mobHeight;
+		state = 0;
+		
+		bounds = new Rectangle();
+		setBounds();
+		
+		lastBounds = new Rectangle();
+		
+		dx = 0;
+		dy = 0;
+		
+		ay = Settings.gravity;
+	}
+	
 	public Mob(float x, float y) {
 		this.x = x;
 		this.y = y;

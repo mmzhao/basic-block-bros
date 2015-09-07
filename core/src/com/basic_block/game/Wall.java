@@ -15,6 +15,17 @@ public class Wall extends Entity{
 		setBounds();
 	}
 	
+	public Wall(float tileOffset) {
+		x = Settings.screenWidth/2 - 500 + tileOffset;
+		y = 1300;
+		width = 1000;
+		height = 10;
+		state = 0;
+		
+		bounds = new Rectangle();
+		setBounds();
+	}
+	
 	public Wall(float x, float y, float width, float height) {
 		this.x = x;
 		this.y = y;

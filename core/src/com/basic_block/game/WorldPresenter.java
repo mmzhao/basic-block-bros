@@ -18,6 +18,9 @@ public class WorldPresenter implements Screen{
 	
 	private MController controller;
 	
+	// can never go backwards, so this is a checkpoint
+	private float checkpoint;
+	
 	public WorldPresenter(final BasicGame game) {
 		this.game = game;
 		
@@ -27,6 +30,8 @@ public class WorldPresenter implements Screen{
 		// initial setup
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Settings.screenWidth, Settings.screenHeight);
+		
+		checkpoint = Settings.screenWidth/2;
 	}
 
 	@Override
@@ -41,11 +46,12 @@ public class WorldPresenter implements Screen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		// update camera once per frame
 		camera.position.x = world.player.getX() + world.player.getWidth() / 2;
-		if(camera.position.x < Settings.screenWidth/2)
-			camera.position.x = Settings.screenWidth/2;
+		if(camera.position.x < checkpoint)
+			camera.position.x = checkpoint;
 		if(camera.position.x > world.maxX - Settings.screenWidth/2)
 			camera.position.x = world.maxX - Settings.screenWidth/2;
 		camera.update();
+		checkpoint = camera.position.x;
 		// use coordinate system for current camera
 		game.batch.setProjectionMatrix(camera.combined);
 		

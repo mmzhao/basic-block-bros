@@ -24,11 +24,8 @@ public class Player extends DynamicEntity{
 		super();
 
 		this.controller = controller;
-		
-		float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
         
-		x = Settings.screenWidth/2;
+		x = Settings.screenWidth/2 - Settings.playerWidth/2;
 		y = Settings.screenHeight/2;
 		
 		width = Settings.playerWidth;
@@ -54,13 +51,13 @@ public class Player extends DynamicEntity{
 				}
 				dx = 0;
 				if (controller.up == true) {
-					dy = 500;
+					dy = Settings.jumpMoveSpeed;
 					state = JUMP_STATE;
 				} else if (controller.left) {
-					dx = -500;
+					dx = -Settings.xButtonMoveSpeed;
 					state = RUN_LEFT_STATE;
 				} else if (controller.right) {
-					dx = 500;
+					dx = Settings.xButtonMoveSpeed;
 					state = RUN_RIGHT_STATE;
 				}
 				break;
@@ -68,11 +65,11 @@ public class Player extends DynamicEntity{
 				
 				if (controller.right && controller.left);
 				else if (controller.right) {
-					dx = 500;
+					dx = Settings.xButtonMoveSpeed;
 					state = JUMP_RIGHT_STATE;
 				}
 				else if (controller.left) {
-					dx = -500;
+					dx = -Settings.xButtonMoveSpeed;
 					state = JUMP_LEFT_STATE;
 				}
 				
@@ -106,11 +103,11 @@ public class Player extends DynamicEntity{
 			case FALL_STATE:
 				if (controller.right && controller.left);
 				else if (controller.right) {
-					dx = 500;
+					dx = Settings.xButtonMoveSpeed;
 					state = FALL_RIGHT_STATE;
 				}
 				else if (controller.left) {
-					dx = -500;
+					dx = -Settings.xButtonMoveSpeed;
 					state = FALL_LEFT_STATE;
 				}
 				if (dy == 0) {
@@ -141,7 +138,7 @@ public class Player extends DynamicEntity{
 				break;
 			case RUN_RIGHT_STATE:
 				if (controller.up) {
-					dy = 500;
+					dy = Settings.jumpMoveSpeed;
 					state = JUMP_RIGHT_STATE;
 				}
 				if (!controller.right) {
@@ -151,7 +148,7 @@ public class Player extends DynamicEntity{
 				break;
 			case RUN_LEFT_STATE:
 				if (controller.up) {
-					dy = 500;
+					dy = Settings.jumpMoveSpeed;
 					state = JUMP_LEFT_STATE;
 				}
 				if (!controller.left) {
