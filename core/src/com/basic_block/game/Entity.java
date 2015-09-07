@@ -1,6 +1,5 @@
 package com.basic_block.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Entity {
@@ -16,21 +15,24 @@ public class Entity {
 	protected Rectangle bounds;
 	
 	public Entity() {
-		float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-		x = w/2 - 500;
+		x = Settings.screenWidth/2 - 500;
 		y = 100;
 		width = 1000;
 		height = 10;
 		state = 0;
+		
 		bounds = new Rectangle();
+		setBounds();
 	}
 	
-	public Rectangle getBounds() {
+	public void setBounds() {
 		bounds.x = x;
 		bounds.y = y;
 		bounds.width = width;
 		bounds.height = height;
+	}
+	
+	public Rectangle getBounds() {
 		return bounds;
 	}
 	

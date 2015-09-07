@@ -1,9 +1,9 @@
 package com.basic_block.game;
 
-import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 
 public class World {
 	
@@ -16,22 +16,29 @@ public class World {
 
 	Player player;
 	
-	Platform platform;
+	Array<Platform> platforms;
 	
-	ArrayList<Mob> mobs;
+	Array<Wall> walls;
 	
+	Array<Mob> mobs;
+	
+	Array<Pickup> pickups;
+	
+	int hitCounter = 0;
+	int pickupCounter = 0;
 	
 	public World(MController controller) {
-		float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
 		minX = 0;
-		maxX = w;
+		maxX = Settings.screenWidth * 3;
 		minY = 0;
-		maxY = h;
+		maxY = Settings.screenHeight;
 		roomBounds = new Rectangle(minX, minY, maxX - minX, maxY - minY);
 		player = new Player(controller);
-		platform = new Platform();
-		mobs = new ArrayList<Mob>();
+		platforms = new Array<Platform>();
+		walls = new Array<Wall>();
+		mobs = new Array<Mob>();
+		pickups = new Array<Pickup>();
+		
 		for(int i = 0; i < 1; i++) {
 			Mob m = new Mob();
 //			m.setX((i % 200) * 10);
@@ -39,6 +46,9 @@ public class World {
 			
 			mobs.add(m);
 		}
+		platforms.add(new Platform());
+		walls.add(new Wall());
+		pickups.add(new Pickup());
 		
 	}
 	
@@ -49,20 +59,37 @@ public class World {
 			mob.update(delta);
 		
 		// check collisions
-		if(Collision.intersect(player, platform)) {
-			Collision.fixIntersection(player, platform, delta);
-		}
-		for(Mob mob: mobs){
-			if(Collision.intersect(mob, platform)) {
-				Collision.fixIntersection(mob, platform, delta);
+		for(Platform platform: platforms) {
+			if(Collision.intersect(player, platform)) {
+				Collision.fixIntersection(player, platform, delta);
 			}
 		}
-		
+		for(Wall wall: walls) {
+			if(Collision.intersect(player, wall)) {
+				Collision.fixIntersection(player, wall, delta);
+			}
+		}
+		for(Mob mob: mobs){
+			for(Platform platform: platforms) {
+				if(Collision.intersect(mob, platform)) {
+					Collision.fixIntersection(mob, platform, delta);
+				}
+			}
+			for(Wall wall: walls) {
+				if(Collision.intersect(mob, wall)) {
+					Collision.fixIntersection(mob, wall, delta);
+				}
+			}
+			if(Collision.intersect(player, mob)) {
+				hitCounter++;
+			}
+		}
 		player.stateChange(delta);
-//		if(Collision.intersect(player, mob)) {
-//			System.out.println("hit");
-//		}
-		
+		for(Pickup pickup: pickups) {
+			if(Collision.intersect(player, pickup)) {
+				pickupCounter++;
+			}
+		}
 	}
 	
 }
