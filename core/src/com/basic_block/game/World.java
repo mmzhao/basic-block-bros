@@ -20,7 +20,8 @@ public class World {
 	
 	ArrayList<Mob> mobs;
 	
-	public World() {
+	
+	public World(MController controller) {
 		float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 		minX = 0;
@@ -28,7 +29,7 @@ public class World {
 		minY = 0;
 		maxY = h;
 		roomBounds = new Rectangle(minX, minY, maxX - minX, maxY - minY);
-		player = new Player();
+		player = new Player(controller);
 		platform = new Platform();
 		mobs = new ArrayList<Mob>();
 		for(int i = 0; i < 1; i++) {
@@ -56,6 +57,8 @@ public class World {
 				Collision.fixIntersection(mob, platform, delta);
 			}
 		}
+		
+		player.stateChange(delta);
 //		if(Collision.intersect(player, mob)) {
 //			System.out.println("hit");
 //		}

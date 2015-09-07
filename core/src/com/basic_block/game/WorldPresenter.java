@@ -29,10 +29,13 @@ public class WorldPresenter implements Screen{
 	// libgdx Array is basically an arraylist
 	private Texture img;
 	
+	private MController controller;
+	
 	public WorldPresenter(final BasicGame game) {
 		this.game = game;
 		
-		world = new World();
+		controller = new MController();
+		world = new World(controller);
 		
 		// initial setup
 		camera = new OrthographicCamera();
@@ -40,6 +43,7 @@ public class WorldPresenter implements Screen{
         float h = Gdx.graphics.getHeight();
 		camera.setToOrtho(false, w, h);
 		img = new Texture("badlogic.jpg");
+		
 	}
 
 	@Override
@@ -73,15 +77,18 @@ public class WorldPresenter implements Screen{
 		// stuff for changes, like movement etc
 		
 		// user input
-		if(Gdx.input.isKeyPressed(Keys.LEFT)) world.player.dx = -200;
-		else if(Gdx.input.isKeyPressed(Keys.RIGHT)) world.player.dx = 200;
-		else world.player.dx = 0;
+        controller.reset();
+		if(Gdx.input.isKeyPressed(Keys.LEFT)) {
+			controller.left = true;
+			
+		}
+		if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
+			controller.right = true;
+		}
+		if(Gdx.input.isKeyPressed(Keys.UP)) {
+			controller.up = true;
+		}
 		
-		if(Gdx.input.isKeyPressed(Keys.UP)) world.player.dy = 500;
-//		else if(Gdx.input.isKeyPressed(Keys.DOWN)) world.player.dy = -50;
-//		else world.player.dx = 0;
-		
-	    
 	}
 	
 
