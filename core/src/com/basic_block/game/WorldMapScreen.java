@@ -2,6 +2,7 @@ package com.basic_block.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
@@ -34,7 +35,10 @@ public class WorldMapScreen implements Screen{
         bGame.font.draw(bGame.batch, "You're now in World Map, kid.", 100, 150);
         bGame.batch.end();
         
-        
+        if (Gdx.input.isKeyJustPressed(Keys.ANY_KEY)) {
+			bGame.setScreen(new WorldPresenter(bGame));
+			dispose();
+		}
 	}
 
 	@Override
