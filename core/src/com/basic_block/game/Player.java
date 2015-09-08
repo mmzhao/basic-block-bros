@@ -81,9 +81,9 @@ public class Player extends DynamicEntity{
 	        public void beginContact(Contact contact) {
 		        if(contact.getFixtureA().getUserData() != null &&
 		        		contact.getFixtureA().getUserData().equals("playerFoot"))
-		        	System.out.println("hi");
-		        if(contact.getFixtureB().getBody().getUserData() != null &&
-		               contact.getFixtureB().getBody().getUserData().equals("playerFoot"))
+		        	isOnGround = true;
+		        if(contact.getFixtureB().getUserData() != null &&
+		               contact.getFixtureB().getUserData().equals("playerFoot"))
 		        	isOnGround = true;
 	        }
 	
@@ -92,8 +92,8 @@ public class Player extends DynamicEntity{
 	        	if(contact.getFixtureA().getUserData() != null &&
 		        		contact.getFixtureA().getUserData().equals("playerFoot"))
 		        	isOnGround = false;
-		        if(contact.getFixtureB().getBody().getUserData() != null &&
-		               contact.getFixtureB().getBody().getUserData().equals("playerFoot"))
+		        if(contact.getFixtureB().getUserData() != null &&
+		               contact.getFixtureB().getUserData().equals("playerFoot"))
 		        	isOnGround = false;
 	        }
 	
@@ -112,6 +112,7 @@ public class Player extends DynamicEntity{
 	}
 	
 	public void stateChange(float delta) {
+		System.out.println();
 		if (controller.left) {
 			body.applyForce(new Vector2(-body.getMass() * 1000, 0), body.getWorldCenter(), false);
 		} 
