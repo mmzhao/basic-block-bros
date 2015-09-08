@@ -20,9 +20,9 @@ public class Tile {
 	
 	Array<Pickup> pickups;
 	
-	public Tile(float tileOffset) {
-		minX = 0;
-		maxX = Settings.screenWidth;
+	public Tile(float tileOffset, com.badlogic.gdx.physics.box2d.World pWorld) {
+		minX = tileOffset;
+		maxX = Settings.screenWidth + tileOffset;
 		minY = 0;
 		maxY = Settings.screenHeight;
 		tileBounds = new Rectangle(minX, minY, maxX - minX, maxY - minY);
@@ -32,15 +32,23 @@ public class Tile {
 		pickups = new Array<Pickup>();
 		
 		for(int i = 0; i < 1; i++) {
-			Mob m = new Mob(tileOffset);
+			Mob m = new Mob(tileOffset, pWorld);
 //			m.setX((i % 200) * 10);
 //			m.setY((i / 200) * 10);
 			
 			mobs.add(m);
 		}
-		platforms.add(new Platform(tileOffset));
-		walls.add(new Wall(tileOffset));
-		pickups.add(new Pickup(tileOffset));
+		platforms.add(new Platform(tileOffset, pWorld));
+//		platforms.add(new Platform(150, 120, 2360, 10, tileOffset));
+//		platforms.add(new Platform(150, 140, 2360, 10, tileOffset));
+//		platforms.add(new Platform(150, 160, 2360, 10, tileOffset));
+//		platforms.add(new Platform(150, 180, 2360, 10, tileOffset));
+//		platforms.add(new Platform(150, 200, 2360, 10, tileOffset));
+//		platforms.add(new Platform(150, 220, 2360, 10, tileOffset));
+//		platforms.add(new Platform(150, 240, 2360, 10, tileOffset));
+//		platforms.add(new Platform(150, 260, 2360, 10, tileOffset));
+		walls.add(new Wall(tileOffset, pWorld));
+		pickups.add(new Pickup(tileOffset, pWorld));
 	}
 	
 }

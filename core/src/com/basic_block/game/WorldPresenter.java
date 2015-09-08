@@ -7,6 +7,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 
 public class WorldPresenter implements Screen{
 	
@@ -18,9 +20,6 @@ public class WorldPresenter implements Screen{
 	
 	private MController controller;
 	
-	// can never go backwards, so this is a checkpoint
-	private float checkpoint;
-	
 	public WorldPresenter(final BasicGame game) {
 		this.game = game;
 		
@@ -30,8 +29,6 @@ public class WorldPresenter implements Screen{
 		// initial setup
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Settings.screenWidth, Settings.screenHeight);
-		
-		checkpoint = Settings.screenWidth/2;
 	}
 
 	@Override
@@ -46,12 +43,12 @@ public class WorldPresenter implements Screen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		// update camera once per frame
 		camera.position.x = world.player.getX() + world.player.getWidth() / 2;
-		if(camera.position.x < checkpoint)
-			camera.position.x = checkpoint;
+		if(camera.position.x < world.checkpoint)
+			camera.position.x = world.checkpoint;
 		if(camera.position.x > world.maxX - Settings.screenWidth/2)
 			camera.position.x = world.maxX - Settings.screenWidth/2;
 		camera.update();
-		checkpoint = camera.position.x;
+		world.checkpoint = camera.position.x;
 		// use coordinate system for current camera
 		game.batch.setProjectionMatrix(camera.combined);
 		
@@ -78,9 +75,9 @@ public class WorldPresenter implements Screen{
 		
         // fps display
 		game.font.setColor(Color.RED);
-		game.font.draw(game.batch, "fps: " + fps, 100, 1500);
-		game.font.draw(game.batch, "hits: " + world.hitCounter, 100, 1450);
-		game.font.draw(game.batch, "pickups" + world.pickupCounter, 100, 1400);
+		game.font.draw(game.batch, "fps: " + fps, 100 + world.checkpoint - Settings.screenWidth/2, 1500);
+		game.font.draw(game.batch, "hits: " + world.hitCounter, 100 + world.checkpoint - Settings.screenWidth/2, 1450);
+		game.font.draw(game.batch, "pickups" + world.pickupCounter, 100 + world.checkpoint - Settings.screenWidth/2, 1400);
         
         game.batch.end();
 		// stop drawing stuff
