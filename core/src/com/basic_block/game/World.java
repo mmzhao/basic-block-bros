@@ -109,7 +109,7 @@ public class World {
 //				hitCounter++;
 //			}
 //		}
-//		player.stateChange(delta);
+		player.stateChange(delta);
 //		for(Pickup pickup: pickups) {
 //			if(Collision.intersect(player, pickup)) {
 //				pickupCounter++;
