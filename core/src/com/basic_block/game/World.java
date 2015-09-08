@@ -43,7 +43,7 @@ public class World {
 		maxY = Settings.screenHeight;
 		roomBounds = new Rectangle(minX, minY, maxX - minX, maxY - minY);
 
-		world = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -98f), true);
+		world = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -980f), true);
 		
 		player = new Player(controller, world);
 		

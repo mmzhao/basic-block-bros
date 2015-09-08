@@ -12,7 +12,7 @@ public class Mob extends DynamicEntity {
 	}
 	
 	public Mob(float tileOffset, com.badlogic.gdx.physics.box2d.World world) {
-		x = Settings.screenWidth/2 - 400 + tileOffset;
+		x = Settings.screenWidth/2 - 100 + tileOffset;
 		y = Settings.screenHeight/2;
 		
 		width = Settings.mobWidth;

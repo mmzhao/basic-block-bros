@@ -13,9 +13,9 @@ public class Platform extends Entity {
 	
 	public Platform(float tileOffset, com.badlogic.gdx.physics.box2d.World world) {
 		x = tileOffset;
-		y = 100;
-		width = 2560;
-		height = 10;
+		y = 12;
+		width = 320;
+		height = 2;
 		
 		bounds = new Rectangle();
 		setBounds();
