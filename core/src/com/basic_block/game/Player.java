@@ -30,6 +30,8 @@ public class Player extends DynamicEntity{
 	
 	int state;
 	
+	private boolean isOnGround;
+	
 	public Player(MController controller, com.badlogic.gdx.physics.box2d.World world) {
 
 		this.controller = controller;
@@ -61,33 +63,38 @@ public class Player extends DynamicEntity{
         fixture = body.createFixture(fixtureDef);
         fixture.setUserData("playerBody");
         
-        shape.setAsBox(1f, 1f, new Vector2(0, height), 0);
+        shape.setAsBox(1f, 1f, new Vector2(0, -height/2), 0);
         fixtureDef.isSensor = true;
        
         
         fFixture = body.createFixture(fixtureDef);
         fFixture.setUserData("playerFoot");
         
+        body.setUserData("playerBody");
+        
+        
         shape.dispose();
         
         world.setContactListener(new ContactListener() {
 
-	            @Override
+	        @Override
 	        public void beginContact(Contact contact) {
-	            	System.out.println(contact.getFixtureA().getBody().getUserData());
-	            	System.out.println(contact.getFixtureB().getBody().getUserData());
-	            
-		        if(contact.getFixtureA().getBody().getUserData() != null &&
-		        		contact.getFixtureA().getBody().getUserData().equals("playerFoot"))
-		        	System.out.println("Contact detected");
+		        if(contact.getFixtureA().getUserData() != null &&
+		        		contact.getFixtureA().getUserData().equals("playerFoot"))
+		        	System.out.println("hi");
 		        if(contact.getFixtureB().getBody().getUserData() != null &&
 		               contact.getFixtureB().getBody().getUserData().equals("playerFoot"))
-		        	System.out.println("Contact detected");
+		        	isOnGround = true;
 	        }
 	
 	        @Override
 	        public void endContact(Contact contact) {
-	            System.out.println("Contact removed");
+	        	if(contact.getFixtureA().getUserData() != null &&
+		        		contact.getFixtureA().getUserData().equals("playerFoot"))
+		        	isOnGround = false;
+		        if(contact.getFixtureB().getBody().getUserData() != null &&
+		               contact.getFixtureB().getBody().getUserData().equals("playerFoot"))
+		        	isOnGround = false;
 	        }
 	
 			@Override
@@ -105,15 +112,19 @@ public class Player extends DynamicEntity{
 	}
 	
 	public void stateChange(float delta) {
+		if (controller.left) {
+			body.applyForce(new Vector2(-body.getMass() * 1000, 0), body.getWorldCenter(), false);
+		} 
+		if (controller.right) {
+			body.applyForce(new Vector2(body.getMass() * 1000, 0), body.getWorldCenter(), false);
+		}
 		switch (state) {
 			case STAND_STATE:
 				if (controller.up==true) {
-					System.out.println("hi");
 					body.applyLinearImpulse(new Vector2(0, body.getMass() * 1000), body.getWorldCenter(), false);
+					state = JUMP_STATE;
 				}
 				break;
-		}
-	}
 //				if (dy < 0) {
 //					state = FALL_STATE;
 //					stateChange(delta);
@@ -131,22 +142,11 @@ public class Player extends DynamicEntity{
 //					state = RUN_RIGHT_STATE;
 //				}
 //				break;
-//			case JUMP_STATE:
-//				
-//				if (controller.right && controller.left);
-//				else if (controller.right) {
-//					dx = Settings.xButtonMoveSpeed;
-//					state = JUMP_RIGHT_STATE;
-//				}
-//				else if (controller.left) {
-//					dx = -Settings.xButtonMoveSpeed;
-//					state = JUMP_LEFT_STATE;
-//				}
-//				
-//				if (dy <= 0) {
-//					state = FALL_STATE;
-//				}
-//				break;
+			case JUMP_STATE:
+				if (isOnGround) {
+					state = STAND_STATE;
+				}
+				break;
 //				
 //			case JUMP_RIGHT_STATE:
 //				if (!controller.right) {
@@ -226,7 +226,7 @@ public class Player extends DynamicEntity{
 //					state = STAND_STATE;
 //				}
 //				break;
-//		}
-//	}
+		}
+	}
 	
 }
