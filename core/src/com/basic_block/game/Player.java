@@ -2,8 +2,14 @@ package com.basic_block.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 public class Player extends DynamicEntity{
@@ -19,6 +25,8 @@ public class Player extends DynamicEntity{
 	private final int JUMP_LEFT_STATE = 6;
 	private final int FALL_LEFT_STATE = 7;
 	private final int FALL_RIGHT_STATE = 8;
+	
+	private Fixture fFixture;
 	
 	int state;
 	
@@ -51,13 +59,61 @@ public class Player extends DynamicEntity{
         fixtureDef.density = 1f;
         
         fixture = body.createFixture(fixtureDef);
+        fixture.setUserData("playerBody");
+        
+        shape.setAsBox(1f, 1f, new Vector2(0, height), 0);
+        fixtureDef.isSensor = true;
+       
+        
+        fFixture = body.createFixture(fixtureDef);
+        fFixture.setUserData("playerFoot");
         
         shape.dispose();
+        
+        world.setContactListener(new ContactListener() {
+
+	            @Override
+	        public void beginContact(Contact contact) {
+	            	System.out.println(contact.getFixtureA().getBody().getUserData());
+	            	System.out.println(contact.getFixtureB().getBody().getUserData());
+	            
+		        if(contact.getFixtureA().getBody().getUserData() != null &&
+		        		contact.getFixtureA().getBody().getUserData().equals("playerFoot"))
+		        	System.out.println("Contact detected");
+		        if(contact.getFixtureB().getBody().getUserData() != null &&
+		               contact.getFixtureB().getBody().getUserData().equals("playerFoot"))
+		        	System.out.println("Contact detected");
+	        }
+	
+	        @Override
+	        public void endContact(Contact contact) {
+	            System.out.println("Contact removed");
+	        }
+	
+			@Override
+			public void preSolve(Contact contact, Manifold oldManifold) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void postSolve(Contact contact, ContactImpulse impulse) {
+				// TODO Auto-generated method stub
+				
+			}
+	    });
 	}
 	
-//	public void stateChange(float delta) {
-//		switch (state) {
-//			case STAND_STATE:
+	public void stateChange(float delta) {
+		switch (state) {
+			case STAND_STATE:
+				if (controller.up==true) {
+					System.out.println("hi");
+					body.applyLinearImpulse(new Vector2(0, body.getMass() * 1000), body.getWorldCenter(), false);
+				}
+				break;
+		}
+	}
 //				if (dy < 0) {
 //					state = FALL_STATE;
 //					stateChange(delta);
