@@ -75,10 +75,11 @@ public class WorldPresenter implements Screen{
 		
         // fps display
 		game.font.setColor(Color.RED);
-		game.font.draw(game.batch, "fps: " + fps, 100 + world.checkpoint - Settings.screenWidth/2, 1500);
-		game.font.draw(game.batch, "hits: " + world.hitCounter, 100 + world.checkpoint - Settings.screenWidth/2, 1450);
-		game.font.draw(game.batch, "pickups" + world.pickupCounter, 100 + world.checkpoint - Settings.screenWidth/2, 1400);
-        
+//		game.font.draw(game.batch, "fps: " + fps, 2 + world.checkpoint - Settings.screenWidth/2, 42);
+//		game.font.draw(game.batch, "hits: " + world.hitCounter, 2 + world.checkpoint - Settings.screenWidth/2, 40);
+//		game.font.draw(game.batch, "pickups" + world.pickupCounter, 2 + world.checkpoint - Settings.screenWidth/2, 38);
+		game.font.draw(game.batch, ""+  world.player.isOnGround, 2 + world.checkpoint - Settings.screenWidth/2, 36);
+		
         game.batch.end();
 		// stop drawing stuff
 		

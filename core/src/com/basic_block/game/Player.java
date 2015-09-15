@@ -25,12 +25,17 @@ public class Player extends DynamicEntity{
 	private final int JUMP_LEFT_STATE = 6;
 	private final int FALL_LEFT_STATE = 7;
 	private final int FALL_RIGHT_STATE = 8;
+	private final int LANDING_STATE = 9;
+	
+	private float justLanded;
 	
 	private Fixture fFixture;
 	
 	int state;
 	
-	private boolean isOnGround;
+	boolean isOnGround;
+	
+	private Vector2 hForce;
 	
 	public Player(MController controller, com.badlogic.gdx.physics.box2d.World world) {
 
@@ -38,6 +43,10 @@ public class Player extends DynamicEntity{
         
 		x = Settings.screenWidth/2;
 		y = Settings.screenHeight/2;
+		
+		hForce = new Vector2(0, 0);
+		
+		justLanded = 0;
 		
 		width = Settings.playerWidth;
 		height = Settings.playerHeight;
@@ -58,12 +67,13 @@ public class Player extends DynamicEntity{
         
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
+        fixtureDef.density = 10f;
         
         fixture = body.createFixture(fixtureDef);
         fixture.setUserData("playerBody");
         
-        shape.setAsBox(1f, 1f, new Vector2(0, -height/2), 0);
+        
+        shape.setAsBox(.5f, .5f, new Vector2(0, -height), 0);
         fixtureDef.isSensor = true;
        
         
@@ -71,7 +81,7 @@ public class Player extends DynamicEntity{
         fFixture.setUserData("playerFoot");
         
         body.setUserData("playerBody");
-        
+        body.setLinearDamping(0);
         
         shape.dispose();
         
@@ -112,17 +122,25 @@ public class Player extends DynamicEntity{
 	}
 	
 	public void stateChange(float delta) {
-		System.out.println();
+		
+
 		if (controller.left) {
-			body.applyForce(new Vector2(-body.getMass() * 1000, 0), body.getWorldCenter(), false);
+//			body.applyLinearImpulse(new Vector2(-body.getMass() * 50 * delta , 0), body.getWorldCenter(), false);
+//			body.applyLinearImpulse(new Vector2(-body.getMass()/2, 0), body.getWorldCenter(), false);
+			body.setLinearVelocity(-30, body.getLinearVelocity().y);
 		} 
 		if (controller.right) {
-			body.applyForce(new Vector2(body.getMass() * 1000, 0), body.getWorldCenter(), false);
+//			body.applyLinearImpulse(new Vector2(body.getMass() * 50 * delta , 0), body.getWorldCenter(), false);
+
+//			body.applyLinearImpulse(new Vector2(body.getMass()/2,0), body.getWorldCenter(), false);
+//			body.getLinearVelocity().x = -100;
+			body.setLinearVelocity(30, body.getLinearVelocity().y);
 		}
 		switch (state) {
 			case STAND_STATE:
 				if (controller.up==true) {
-					body.applyLinearImpulse(new Vector2(0, body.getMass() * 1000), body.getWorldCenter(), false);
+					body.getLinearVelocity().y += 5;
+					body.applyLinearImpulse(new Vector2(0, body.getMass() * 20), body.getWorldCenter(), false);
 					state = JUMP_STATE;
 				}
 				break;
@@ -145,9 +163,17 @@ public class Player extends DynamicEntity{
 //				break;
 			case JUMP_STATE:
 				if (isOnGround) {
+//					justLanded = 0;
 					state = STAND_STATE;
 				}
 				break;
+//			case LANDING_STATE:
+//				justLanded += delta;
+//				if(justLanded >= .3) {
+//					state = STAND_STATE;
+//				}
+//				break;
+				
 //				
 //			case JUMP_RIGHT_STATE:
 //				if (!controller.right) {

@@ -12,10 +12,10 @@ public class Wall extends Entity{
 	}
 	
 	public Wall(float tileOffset, com.badlogic.gdx.physics.box2d.World world) {
-		x = Settings.screenWidth/2 - 64 + tileOffset;
-		y = 150;
-		width = 120;
-		height = 2;
+		x = Settings.screenWidth/2 - 10 + tileOffset;
+		y = 25;
+		width = 20;
+		height = 1;
 		state = 0;
 		
 		bounds = new Rectangle();

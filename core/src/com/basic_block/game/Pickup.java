@@ -13,11 +13,11 @@ public class Pickup extends DynamicEntity{
 	
 	public Pickup(float tileOffset, com.badlogic.gdx.physics.box2d.World world) {
 		
-		x = 64 + tileOffset;
-		y = 64;
+		x = 10 + tileOffset;
+		y = 10;
 		
-		width = 8;
-		height = 8;
+		width = 1;
+		height = 1;
 		
 		bounds = new Rectangle();
 		setBounds();

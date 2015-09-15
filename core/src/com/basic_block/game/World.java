@@ -43,7 +43,9 @@ public class World {
 		maxY = Settings.screenHeight;
 		roomBounds = new Rectangle(minX, minY, maxX - minX, maxY - minY);
 
-		world = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -980f), true);
+//		com.badlogic.gdx.physics.box2d.World.setVelocityThreshold(0.0f);
+		world = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -98f), false);
+		
 		
 		player = new Player(controller, world);
 		
@@ -54,7 +56,7 @@ public class World {
 		
 		tiles = new Array<Tile>();
 		tiles.add(new Tile(0, world));
-		for(int i = 0; i < 3; i++){
+		for(int i = 0; i < 20; i++){
 			tiles.add(new Tile(tiles.get(i).maxX, world));
 		}
 		updateTiles();
@@ -64,7 +66,7 @@ public class World {
 	
 	public void update(float delta) {
 		updateTiles();
-		world.step(delta, 6, 2);
+		world.step(delta, 6, 6);
 		
 		// do updates
 		player.update(delta);
